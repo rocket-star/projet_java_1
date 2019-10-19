@@ -2,6 +2,7 @@ package data;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 
 public interface ActionsBD {
 
@@ -14,10 +15,10 @@ public interface ActionsBD {
 	void deleteProgrammeur(String matricule);
 
 	void insertProgrammeur(String matricule, String nom, String prenom, String adresse, String pseudo,
-			String responsable, String hobby, String dateDeNaissance, String dateEmbauche);
+			String responsable, String hobby, java.sql.Date dateDeNaissance, java.sql.Date dateEmbauche);
 
 	void updateProgrammeur(String matricule, String nom, String prenom, String adresse, String pseudo,
-			String responsable, String hobby, String dateDeNaissance, String dateEmbauche);
+			String responsable, String hobby, java.sql.Date dateDeNaissance, java.sql.Date dateEmbauche);
 	
 	String afficherProgrammeurs();
 	

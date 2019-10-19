@@ -7,7 +7,10 @@ package ihm;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -36,7 +39,7 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author mohamed
  */
-public class Vue extends JFrame implements ActionListener {
+public class Vue extends GestionVueAbstraite implements ActionListener {
 
 	// Déclaration des attributs
 	// L'initialisation se fera "en local" dans des méthodes
@@ -91,7 +94,7 @@ public class Vue extends JFrame implements ActionListener {
 	private boolean estAjouter;
 	private boolean estSupprimer;
 	private boolean estModifier;
-	
+
 	// End of variables declaration
 	public void init() {
 		accueil();
@@ -117,6 +120,7 @@ public class Vue extends JFrame implements ActionListener {
 			panelTous.add(scroll);
 			this.add(panelTous);
 			zoneAffichageProgrammeurs.setEnabled(false);
+			zoneAffichageProgrammeurs.setDisabledTextColor(Color.BLACK);
 			dt = new ActionsBDImpl();
 			String contenuTextArea = dt.afficherProgrammeurs();
 			zoneAffichageProgrammeurs.setText(contenuTextArea);
@@ -152,11 +156,11 @@ public class Vue extends JFrame implements ActionListener {
 				remove(panelTous);
 			}
 			remove(PanelFondEcran);
-			
+
 			estAjouter = true;
 			estSupprimer = false;
 			estModifier = false;
-			
+
 			formulaire();
 			AfficherForm();
 			reinitialise.setEnabled(true);
@@ -174,11 +178,11 @@ public class Vue extends JFrame implements ActionListener {
 			if (panelTous != null) {
 				remove(panelTous);
 			}
-			
+
 			estAjouter = false;
 			estSupprimer = true;
 			estModifier = false;
-			
+
 			remove(PanelFondEcran);
 			formulaire();
 			AfficherForm();
@@ -210,16 +214,16 @@ public class Vue extends JFrame implements ActionListener {
 			this.add(panelFormulaire);
 			SwingUtilities.updateComponentTreeUI(this);
 		}
-		if(event.getSource() == ActionQuitter) {
-			int dialogResult = JOptionPane.showConfirmDialog (this, "Vérification","Voulez-vous vraiment quitter ?",JOptionPane.YES_NO_OPTION);
-			if(dialogResult == JOptionPane.YES_OPTION){
+		if (event.getSource() == ActionQuitter) {
+			int dialogResult = JOptionPane.showConfirmDialog(this, "Vérification", "Voulez-vous vraiment quitter ?",
+					JOptionPane.YES_NO_OPTION);
+			if (dialogResult == JOptionPane.YES_OPTION) {
 				this.dispose();
 			}
 		}
 	}
 
-	// IF MATRICULE INTROUVABLE
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButtonRecherhcerActionPerformed(java.awt.event.ActionEvent evt) {
 		if (evt.getSource() == recherche) {
 			dt = new ActionsBDImpl();
 			try {
@@ -234,16 +238,16 @@ public class Vue extends JFrame implements ActionListener {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(progrBean.getDateNaiss());
 				this.jSpinner1.setValue(cal.get(Calendar.DAY_OF_MONTH));
-				this.jSpinner2.setValue(cal.get(Calendar.MONTH)+1);
+				this.jSpinner2.setValue(cal.get(Calendar.MONTH) + 1);
 				this.jSpinner3.setValue(cal.get(Calendar.YEAR));
 				cal.setTime(progrBean.getDateEmbauche());
 				this.jSpinner4.setValue(cal.get(Calendar.DAY_OF_MONTH));
-				this.jSpinner5.setValue(cal.get(Calendar.MONTH)+1);
+				this.jSpinner5.setValue(cal.get(Calendar.MONTH) + 1);
 				this.jSpinner6.setValue(cal.get(Calendar.YEAR));
-				if(estModifier) {
+				if (estModifier) {
 					reinitialise.setEnabled(true);
 					valider.setEnabled(true);
-				}else if(estSupprimer) {
+				} else if (estSupprimer) {
 					reinitialise.setEnabled(false);
 					valider.setEnabled(true);
 				}
@@ -263,10 +267,10 @@ public class Vue extends JFrame implements ActionListener {
 		} // TODO add your handling code here:
 	}
 
-	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) throws ParseException {
 		if (evt.getSource() == valider) {
 			dt = new ActionsBDImpl();
-			if(estAjouter) {
+			if (estAjouter || estModifier) {
 				String matricule = jTMatricule.getText();
 				String nom = jTNom.getText();
 				String prenom = jTPrenom.getText();
@@ -274,23 +278,55 @@ public class Vue extends JFrame implements ActionListener {
 				String pseudo = jTPseudo.getText();
 				String hobby = jTHobby.getText();
 				String adresse = jTAdresse.getText();
-				String dateDeNaissance = jSpinner1.getValue().toString() +"/" +jSpinner2.getValue().toString()+"/"+jSpinner3.getValue().toString();
-				String dateEmbauche = jSpinner4.getValue().toString() +"/" +jSpinner5.getValue().toString()+"/"+jSpinner6.getValue().toString();
-				dt.insertProgrammeur(matricule, nom, prenom, adresse, pseudo, responsable, hobby, dateDeNaissance, dateEmbauche);
-			}else if(estModifier) {
+				String dateDeNaissanceS = jSpinner3.getValue().toString() + "-" + jSpinner2.getValue().toString() + "-"
+						+ jSpinner1.getValue().toString();
+				String dateEmbaucheS = jSpinner6.getValue().toString() + "-" + jSpinner5.getValue().toString() + "-"
+						+ jSpinner4.getValue().toString();
+				java.sql.Date dateDeNaissance = java.sql.Date.valueOf(dateDeNaissanceS);
+				java.sql.Date dateDeEmbauche = java.sql.Date.valueOf(dateEmbaucheS);
+				if (estAjouter) {
+					dt.insertProgrammeur(matricule, nom, prenom, adresse, pseudo, responsable, hobby, dateDeNaissance,
+							dateDeEmbauche);
+					JOptionPane.showMessageDialog(this, "Le Programmeur est ajouté", "Succès!",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else if (estModifier) {
+					dt.updateProgrammeur(matricule, nom, prenom, adresse, pseudo, responsable, hobby, dateDeNaissance,
+							dateDeEmbauche);
+					JOptionPane.showMessageDialog(this, "Le Programmeur est modifié", "Succès!",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+				viderChamps();
+			} else if (estSupprimer) {
 				String matricule = jTMatricule.getText();
-				String nom = jTNom.getText();
-				String prenom = jTPrenom.getText();
-				String responsable = jTResp.getText();
-				String pseudo = jTPseudo.getText();
-				String hobby = jTHobby.getText();
-				String adresse = jTAdresse.getText();
-				String dateDeNaissance = jSpinner1.getValue().toString() +"/" +jSpinner2.getValue().toString()+"/"+jSpinner3.getValue().toString();
-				String dateEmbauche = jSpinner4.getValue().toString() +"/" +jSpinner5.getValue().toString()+"/"+jSpinner6.getValue().toString();
-				dt.updateProgrammeur(matricule, nom, prenom, adresse, pseudo, responsable, hobby, dateDeNaissance, dateEmbauche);;
+				dt.deleteProgrammeur(matricule);
+				JOptionPane.showMessageDialog(this, "Le Programmeur est supprimé", "Succès",
+						JOptionPane.INFORMATION_MESSAGE);
+				viderChamps();
 			}
 		}
 		dt.fermerRessources();
+	}
+
+	private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+		if (evt.getSource() == reinitialise) {
+			viderChamps();
+		}
+	}
+
+	private void viderChamps() {
+		jTMatricule.setText("");
+		jTNom.setText("");
+		jTPrenom.setText("");
+		jTResp.setText("");
+		jTPseudo.setText("");
+		jTHobby.setText("");
+		jTAdresse.setText("");
+		jSpinner1.setValue(1);
+		jSpinner2.setValue(1);
+		jSpinner3.setValue(1945);
+		jSpinner4.setValue(1);
+		jSpinner5.setValue(1);
+		jSpinner6.setValue(1945);
 	}
 
 	private void accueil() {
@@ -299,8 +335,7 @@ public class Vue extends JFrame implements ActionListener {
 		PanelFondEcran.setLayout(null);
 		// Insets insets = PanelFondEcran.getInsets();
 
-		ImageEfrei = new JLabel(
-				new ImageIcon("C:\\Users\\dell\\eclipse-workspace\\javaProjetV2\\Logo-Efrei-Paris-2017.jpg"));
+		ImageEfrei = new JLabel(new ImageIcon("Logo-Efrei-Paris-2017.jpg"));
 		Dimension size = ImageEfrei.getPreferredSize();
 		size = ImageEfrei.getPreferredSize();
 		ImageEfrei.setBounds(100, 70, size.width, size.height);
@@ -323,13 +358,11 @@ public class Vue extends JFrame implements ActionListener {
 
 		MenuPrincipal.add(MenuProgrammeur);
 		MenuPrincipal.add(MenuAction);
-
-		MenuProgrammeur.add(MenuAjouter);
+		MenuProgrammeur.add(MenuAfficher);
+		MenuAfficher.add(AfficherTous);
 		MenuProgrammeur.add(MenuModifier);
 		MenuProgrammeur.add(MenuSupprimer);
-		MenuProgrammeur.add(MenuAfficher);
-
-		MenuAfficher.add(AfficherTous);
+		MenuProgrammeur.add(MenuAjouter);
 
 		MenuAction.add(ActionQuitter);
 		PanelFondEcran.add(ImageEfrei);
@@ -341,11 +374,11 @@ public class Vue extends JFrame implements ActionListener {
 		MenuSupprimer.addActionListener(this);
 		MenuAjouter.addActionListener(this);
 		ActionQuitter.addActionListener(this);
-		
+
 		estAjouter = false;
 		estSupprimer = false;
 		estModifier = false;
-		
+
 		SwingUtilities.updateComponentTreeUI(this);
 
 	}
@@ -510,14 +543,18 @@ public class Vue extends JFrame implements ActionListener {
 		recherche.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton1ActionPerformed(evt);
+				jButtonRecherhcerActionPerformed(evt);
 			}
 		});
 
 		valider.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton3ActionPerformed(evt);
+				try {
+					jButton3ActionPerformed(evt);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -527,27 +564,26 @@ public class Vue extends JFrame implements ActionListener {
 				jButton2ActionPerformed(evt);
 			}
 		});
+		reinitialise.addActionListener(new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jButton4ActionPerformed(evt);
+			}
+		});
 
 		this.add(panelFormulaire);
 		SwingUtilities.updateComponentTreeUI(this);
 	}
 
-/**	public void test(ActionEvent event) {
-		if (event.getSource() == btnAfficherTous) {
-			dt = new ActionsBDImpl();
-			contenuTextArea = dt.afficherProgrammeurs();
-			zoneAffichageProgrammeurs.setText(contenuTextArea);
-			dt.fermerRessources();
-		} else if (event.getSource() == btnRechercher) {
-			dt = new ActionsBDImpl();
-			try {
-				progrBean = dt.getProgrammeur(this.champNom.getText());
-				contenuTextArea = progrBean.toString();
-				zoneAffichageProgrammeurs.setText(contenuTextArea);
-			} catch (ProgrammeurInconnuExeption e) {
-				JOptionPane.showMessageDialog(this, e, "Echec", JOptionPane.ERROR_MESSAGE);
-			}
-			dt.fermerRessources();
-		}
-	}**/
+	/**
+	 * public void test(ActionEvent event) { if (event.getSource() ==
+	 * btnAfficherTous) { dt = new ActionsBDImpl(); contenuTextArea =
+	 * dt.afficherProgrammeurs();
+	 * zoneAffichageProgrammeurs.setText(contenuTextArea); dt.fermerRessources(); }
+	 * else if (event.getSource() == btnRechercher) { dt = new ActionsBDImpl(); try
+	 * { progrBean = dt.getProgrammeur(this.champNom.getText()); contenuTextArea =
+	 * progrBean.toString(); zoneAffichageProgrammeurs.setText(contenuTextArea); }
+	 * catch (ProgrammeurInconnuExeption e) { JOptionPane.showMessageDialog(this, e,
+	 * "Echec", JOptionPane.ERROR_MESSAGE); } dt.fermerRessources(); } }
+	 **/
 }

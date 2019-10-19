@@ -155,7 +155,7 @@ public class ActionsBDImpl implements ActionsBD {
 	 *
 	 */
 	public void insertProgrammeur(String matricule, String nom, String prenom, String adresse, String pseudo,
-			String responsable, String hobby, String dateDeNaissance, String dateEmbauche) {
+			String responsable, String hobby, java.sql.Date dateDeNaissance, java.sql.Date dateEmbauche) {
 		try {
 			pstmt = dbConn.prepareStatement(Constantes.REQUETE_INSERT);
 			pstmt.setString(1, matricule);
@@ -165,8 +165,8 @@ public class ActionsBDImpl implements ActionsBD {
 			pstmt.setString(5, pseudo);
 			pstmt.setString(6, responsable);
 			pstmt.setString(7, hobby);
-			pstmt.setString(8,dateDeNaissance);
-			pstmt.setString(9, dateEmbauche);
+			pstmt.setDate(8,dateDeNaissance);
+			pstmt.setDate(9, dateEmbauche);
 			rs = pstmt.executeQuery();
 		} catch (SQLException sqle) {
 			Logger.getLogger(ActionsBDImpl.class.getName()).log(Level.SEVERE, null, sqle);
@@ -182,7 +182,7 @@ public class ActionsBDImpl implements ActionsBD {
 	 *
 	 */
 	public void updateProgrammeur(String matricule, String nom, String prenom, String adresse, String pseudo,
-			String responsable, String hobby, String dateDeNaissance, String dateEmbauche) {
+			String responsable, String hobby, java.sql.Date dateDeNaissance, java.sql.Date dateEmbauche) {
 		try {
 			pstmt = dbConn.prepareStatement(Constantes.REQUETE_UPDATE);
 			pstmt.setString(1, nom);
@@ -191,8 +191,8 @@ public class ActionsBDImpl implements ActionsBD {
 			pstmt.setString(4, pseudo);
 			pstmt.setString(5, responsable);
 			pstmt.setString(6, hobby);
-			pstmt.setString(7,dateDeNaissance);
-			pstmt.setString(8, dateEmbauche);
+			pstmt.setDate(7,dateDeNaissance);
+			pstmt.setDate(8, dateEmbauche);
 			pstmt.setString(9, matricule);
 			rs = pstmt.executeQuery();
 		} catch (SQLException sqle) {
