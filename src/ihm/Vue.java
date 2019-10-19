@@ -26,6 +26,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSpinner;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import data.ActionsBD;
 import data.ActionsBDImpl;
 import data.ProgrammeurBean;
@@ -289,11 +292,14 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 							dateDeEmbauche);
 					JOptionPane.showMessageDialog(this, "Le Programmeur est ajouté", "Succès!",
 							JOptionPane.INFORMATION_MESSAGE);
+					valider.setEnabled(false);
 				} else if (estModifier) {
 					dt.updateProgrammeur(matricule, nom, prenom, adresse, pseudo, responsable, hobby, dateDeNaissance,
 							dateDeEmbauche);
 					JOptionPane.showMessageDialog(this, "Le Programmeur est modifié", "Succès!",
 							JOptionPane.INFORMATION_MESSAGE);
+					valider.setEnabled(false);
+					reinitialise.setEnabled(false);
 				}
 				viderChamps();
 			} else if (estSupprimer) {
@@ -310,6 +316,10 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 	private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
 		if (evt.getSource() == reinitialise) {
 			viderChamps();
+			if(estModifier) {
+				reinitialise.setEnabled(false);
+				valider.setEnabled(false);
+			}
 		}
 	}
 
@@ -331,6 +341,12 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 
 	private void accueil() {
 
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 		PanelFondEcran = new JPanel(); // Créantion d'un panel pour gérer les widgets
 		PanelFondEcran.setLayout(null);
 		// Insets insets = PanelFondEcran.getInsets();
@@ -574,16 +590,4 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		this.add(panelFormulaire);
 		SwingUtilities.updateComponentTreeUI(this);
 	}
-
-	/**
-	 * public void test(ActionEvent event) { if (event.getSource() ==
-	 * btnAfficherTous) { dt = new ActionsBDImpl(); contenuTextArea =
-	 * dt.afficherProgrammeurs();
-	 * zoneAffichageProgrammeurs.setText(contenuTextArea); dt.fermerRessources(); }
-	 * else if (event.getSource() == btnRechercher) { dt = new ActionsBDImpl(); try
-	 * { progrBean = dt.getProgrammeur(this.champNom.getText()); contenuTextArea =
-	 * progrBean.toString(); zoneAffichageProgrammeurs.setText(contenuTextArea); }
-	 * catch (ProgrammeurInconnuExeption e) { JOptionPane.showMessageDialog(this, e,
-	 * "Echec", JOptionPane.ERROR_MESSAGE); } dt.fermerRessources(); } }
-	 **/
 }
