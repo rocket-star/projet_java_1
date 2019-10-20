@@ -1,15 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ihm;
 
 /**
- *
- * @author Jacques
+ * Class Start: 
  * Cette classe contient le point d'entrée du programme, 
- * c'est-à-dire la méthode "main"
+ * à savoir la méthode "main"
+ * @author FERNANDO, MARIMOUTTOU, GHALMI
+ * @version 1.1
  */
 public class Start {
 

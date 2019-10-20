@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package data;
 
 import java.text.SimpleDateFormat;
@@ -10,8 +5,9 @@ import java.time.DateTimeException;
 import java.util.Date;
 
 /**
- *
- * @author Jacques
+ * Class ProgrammeurBean
+ * @author FERNANDO, MARIMOUTTOU, GHALMI
+ * @version 1.1
  */
 public class ProgrammeurBean {
 	private String matricule;

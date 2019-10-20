@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package data;
 
 import java.sql.Connection;
@@ -18,8 +13,9 @@ import java.util.logging.Logger;
 import myutil.Constantes;
 
 /**
- *
- * @author Jacques
+ * Class  ActionsBDImpl
+ * @author FERNANDO, MARIMOUTTOU, GHALMI
+ * @version 1.1
  */
 public class ActionsBDImpl implements ActionsBD {
 
@@ -31,8 +27,7 @@ public class ActionsBDImpl implements ActionsBD {
 	private ProgrammeurBean prog;
 
 	/**
-	 * Le constructeur permet d'initialiser la connexion
-	 *
+	 * Ce constructeur permet d'initialiser la connexion
 	 */
 	public ActionsBDImpl() {
 		try {
@@ -40,15 +35,14 @@ public class ActionsBDImpl implements ActionsBD {
 		} catch (SQLException sqle) {
 			Logger.getLogger(ActionsBDImpl.class.getName()).log(Level.SEVERE, null, sqle);
 		}
-
 	}
 
 	/**
-	 * Lance la récupère passée en paramètre et retourne le ResultSet
+	 * Lance la requete passée en paramètre et retourne le ResultSet
 	 * correspondant à cette requête
 	 *
-	 * @param req
-	 *            La requête SQL que l'on souhaite exécuter
+	 * @param req La requête SQL que l'on souhaite exécuter
+	 *            
 	 * @return rs Une variable de type ResultSet
 	 */
 	public ResultSet getResultSet(String req) {
@@ -65,7 +59,7 @@ public class ActionsBDImpl implements ActionsBD {
 	 * Cette méthode récupère toutes les infos d'un programmeur et retourne une
 	 * liste de l'ensemble des programmeurs
 	 *
-	 * @return listeProgrammeurs Une variable de type ArryList
+	 * @return listeProgrammeurs : Une variable de type ArryList
 	 */
 	public ArrayList getProgrammeurs() {
 		rs = this.getResultSet(Constantes.REQUETE_TOUS);
@@ -96,9 +90,8 @@ public class ActionsBDImpl implements ActionsBD {
 	 * programmeur sous la forme d'un Java Bean Cette méthode est utilisée pour
 	 * rechercher un progammeur via son matricule
 	 *
-	 * @param nom
-	 *            Le nom saisi par l'utilisateur pour lancer la recherche
-	 * @return prog Une variable de type ProgrammeurBean
+	 * @param nom : Le nom saisi par l'utilisateur pour lancer la recherche
+	 * @return prog : Une variable de type ProgrammeurBean
 	 *
 	 */
 	public ProgrammeurBean getProgrammeur(String matricule) throws ProgrammeurInconnuExeption {
@@ -129,11 +122,9 @@ public class ActionsBDImpl implements ActionsBD {
 	}
 
 	/**
-	 * Cette m�thode supprime un programmeur correspondant � la matricule
+	 * Cette méthode supprime un programmeur correspondant au matricule passé en paramètre
 	 * 
-	 * @param matricule
-	 *            La matricule saisi par l'utilisateur pour lancer la recherche
-	 * @return prog Une variable de type ProgrammeurBean
+	 * @param matricule : La matricule saisi par l'utilisateur utilisé pour lancer la recherche
 	 *
 	 */
 	public void deleteProgrammeur(String matricule) {
@@ -147,11 +138,17 @@ public class ActionsBDImpl implements ActionsBD {
 	}
 
 	/**
-	 * Cette m�thode supprime un programmeur correspondant � la matricule
+	 * Cette méthode ajoute un programmeur à la db
 	 * 
-	 * @param matricule
-	 *            La matricule saisi par l'utilisateur pour lancer la recherche
-	 * @return prog Une variable de type ProgrammeurBean
+	 * @param matricule : Le matricule du programmeur
+	 * @param nom : Nom du programmeur
+	 * @param prenom : Prenom du programmeur
+	 * @param adresse : Adresse du programmeur
+	 * @param pseudo : Pseudo du programmeur
+	 * @param responsable : Responsable du programmeur
+	 * @param hobby : Hobby du programmeur
+	 * @param dateDeNaissance : Date de naissance du programmeur
+	 * @param dateEmbauche : Date d'embauche du programmeur
 	 *
 	 */
 	public void insertProgrammeur(String matricule, String nom, String prenom, String adresse, String pseudo,
@@ -174,11 +171,17 @@ public class ActionsBDImpl implements ActionsBD {
 	}
 	
 	/**
-	 * Cette m�thode supprime un programmeur correspondant � la matricule
+	 * Cette méthode permet de mettre à jour les données d'un programmeur
 	 * 
-	 * @param matricule
-	 *            La matricule saisi par l'utilisateur pour lancer la recherche
-	 * @return prog Une variable de type ProgrammeurBean
+	 * @param matricule : Le (nouveau) matricule du programmeur
+	 * @param nom : (nouveau) Nom du programmeur
+	 * @param prenom : (nouveau) Prenom du programmeur
+	 * @param adresse : (nouvelle) Adresse du programmeur
+	 * @param pseudo : (nouveau) Pseudo du programmeur
+	 * @param responsable : (nouveau) Responsable du programmeur
+	 * @param hobby : (nouveau) Hobby du programmeur
+	 * @param dateDeNaissance : (nouvelle) Date de naissance du programmeur
+	 * @param dateEmbauche : (nouvelle) Date d'embauche du programmeur
 	 *
 	 */
 	public void updateProgrammeur(String matricule, String nom, String prenom, String adresse, String pseudo,
@@ -204,7 +207,7 @@ public class ActionsBDImpl implements ActionsBD {
 	 * Cette méthode permet de construire la chaîne de caractères qui sera
 	 * affichée lorsqu'on choisit Programmeur - Afficher - Tous
 	 *
-	 * @return listeProg Une variable de type String
+	 * @return listeProg : Une variable de type String
 	 *
 	 */
 	public String afficherProgrammeurs() {
@@ -219,7 +222,7 @@ public class ActionsBDImpl implements ActionsBD {
 
 	/**
 	 * Cette méthode permet de libérer les ressources liées à la base de
-	 * données *
+	 * données
 	 */
 	public void fermerRessources() {
 		if (dbConn != null) {

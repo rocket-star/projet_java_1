@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ihm;
 
 import java.awt.event.ActionEvent;
@@ -39,14 +34,14 @@ import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 
 /**
- *
- * @author mohamed
+ * Class Vue
+ * @author FERNANDO, MARIMOUTTOU, GHALMI
+ * @version 1.1
  */
 public class Vue extends GestionVueAbstraite implements ActionListener {
 
-	// Déclaration des attributs
-	// L'initialisation se fera "en local" dans des méthodes
-
+	// DÃ©claration des attributs
+	// L'initialisation se fera "en local" dans des mÃ©thodes
 	private JTextArea zoneAffichageProgrammeurs;
 	private JScrollPane scroll;
 	private JMenuItem ActionQuitter;
@@ -97,8 +92,9 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 	private boolean estAjouter;
 	private boolean estSupprimer;
 	private boolean estModifier;
-
-	// End of variables declaration
+	//Fin de declaration des variables
+	
+	//Cette mÃ©thode permet d'ajouter a notre Vue le JPanel
 	public void init() {
 		accueil();
 		// formulaire();
@@ -218,7 +214,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 			SwingUtilities.updateComponentTreeUI(this);
 		}
 		if (event.getSource() == ActionQuitter) {
-			int dialogResult = JOptionPane.showConfirmDialog(this, "Vérification", "Voulez-vous vraiment quitter ?",
+			int dialogResult = JOptionPane.showConfirmDialog(this, "Vï¿½rification", "Voulez-vous vraiment quitter ?",
 					JOptionPane.YES_NO_OPTION);
 			if (dialogResult == JOptionPane.YES_OPTION) {
 				this.dispose();
@@ -230,8 +226,8 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		if (evt.getSource() == recherche) {
 			dt = new ActionsBDImpl();
 			try {
-				progrBean = dt.getProgrammeur(this.jTMatricule.getText());
-				this.jTNom.setText(progrBean.getNom());
+				progrBean = dt.getProgrammeur(this.jTMatricule.getText());// Une fois le programmeur trouver
+				this.jTNom.setText(progrBean.getNom());//On prÃ©rempli chaque champs du formulaire avec ses informations
 				this.jTPrenom.setText(progrBean.getPrenom());
 				this.jTAdresse.setText(progrBean.getAdresse());
 				this.jTHobby.setText(progrBean.getHobby());
@@ -273,7 +269,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) throws ParseException {
 		if (evt.getSource() == valider) {
 			dt = new ActionsBDImpl();
-			if (estAjouter || estModifier) {
+			if (estAjouter || estModifier) {// ci-dessous on recupere les donnÃ©es contenus dans les champs
 				String matricule = jTMatricule.getText();
 				String nom = jTNom.getText();
 				String prenom = jTPrenom.getText();
@@ -290,13 +286,13 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 				if (estAjouter) {
 					dt.insertProgrammeur(matricule, nom, prenom, adresse, pseudo, responsable, hobby, dateDeNaissance,
 							dateDeEmbauche);
-					JOptionPane.showMessageDialog(this, "Le Programmeur est ajouté", "Succès!",
+					JOptionPane.showMessageDialog(this, "Le Programmeur est ajoutï¿½", "Succï¿½s!",
 							JOptionPane.INFORMATION_MESSAGE);
 					valider.setEnabled(false);
 				} else if (estModifier) {
 					dt.updateProgrammeur(matricule, nom, prenom, adresse, pseudo, responsable, hobby, dateDeNaissance,
 							dateDeEmbauche);
-					JOptionPane.showMessageDialog(this, "Le Programmeur est modifié", "Succès!",
+					JOptionPane.showMessageDialog(this, "Le Programmeur est modifiï¿½", "Succï¿½s!",
 							JOptionPane.INFORMATION_MESSAGE);
 					valider.setEnabled(false);
 					reinitialise.setEnabled(false);
@@ -305,7 +301,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 			} else if (estSupprimer) {
 				String matricule = jTMatricule.getText();
 				dt.deleteProgrammeur(matricule);
-				JOptionPane.showMessageDialog(this, "Le Programmeur est supprimé", "Succès",
+				JOptionPane.showMessageDialog(this, "Le Programmeur est supprimï¿½", "Succï¿½s",
 						JOptionPane.INFORMATION_MESSAGE);
 				viderChamps();
 			}
@@ -322,7 +318,10 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 			}
 		}
 	}
-
+	
+	/**
+	 * Vide les champs du formulaire d'ajout/modification
+	 */
 	private void viderChamps() {
 		jTMatricule.setText("");
 		jTNom.setText("");
@@ -347,7 +346,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-		PanelFondEcran = new JPanel(); // Créantion d'un panel pour gérer les widgets
+		PanelFondEcran = new JPanel(); // CrÃ©ation d'un panel pour gÃ©rer les widgets
 		PanelFondEcran.setLayout(null);
 		// Insets insets = PanelFondEcran.getInsets();
 
@@ -367,10 +366,10 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 
 		this.setVisible(true);
 		this.setTitle("GesProg");
-		setDefaultCloseOperation(EXIT_ON_CLOSE); // Fermeture fenêtre = arrêt de l'application
+		setDefaultCloseOperation(EXIT_ON_CLOSE); // Fermeture fenetre = arret de l'application
 		setBounds(10, 10, 750, 400);
-		PanelFondEcran.setBackground(Color.WHITE);
-		ImageEfrei.setIcon(new ImageIcon("Logo-Efrei-Paris-2017.jpg"));
+		PanelFondEcran.setBackground(Color.WHITE); // Couleur de fond
+		ImageEfrei.setIcon(new ImageIcon("Logo-Efrei-Paris-2017.jpg")); // Image de fond
 
 		MenuPrincipal.add(MenuProgrammeur);
 		MenuPrincipal.add(MenuAction);
@@ -384,7 +383,8 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		PanelFondEcran.add(ImageEfrei);
 		this.add(PanelFondEcran);
 		setJMenuBar(MenuPrincipal);
-
+		
+		// ici on effectue l'enregistrement des widget
 		AfficherTous.addActionListener(this);
 		MenuModifier.addActionListener(this);
 		MenuSupprimer.addActionListener(this);
@@ -398,14 +398,15 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		SwingUtilities.updateComponentTreeUI(this);
 
 	}
-
+	
+	//Cette mÃ©thode initialise et dimensionne les attributs qui concerne le formulaire
 	private void formulaire() {
 		matricule = new JLabel("Matricule");
 		nom = new JLabel("Nom");
 		adresse = new JLabel("Adresse");
-		resp = new JLabel("Résponsable");
+		resp = new JLabel("Rï¿½sponsable");
 		hobby = new JLabel("Hobby");
-		prenom = new JLabel("Prénom");
+		prenom = new JLabel("Prï¿½nom");
 		pseudo = new JLabel("Pseudo");
 		dateNaissance = new JLabel("Date de Naissance");
 		jour = new JLabel("Jour");
@@ -432,7 +433,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		jSpinner2 = new JSpinner(model2);
 		jSpinner3 = new JSpinner(model33);
 		recherche = new JButton("Rechercher");
-		reinitialise = new JButton("Réinitialiser");
+		reinitialise = new JButton("Rï¿½initialiser");
 		valider = new JButton("Valider");
 		annuler = new JButton("Annuler");
 		jTextField10.setText("M");

@@ -4,6 +4,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Interface ActionsBD
+ * @author FERNANDO, MARIMOUTTOU, GHALMI
+ * @version 1.1
+ */
+
 public interface ActionsBD {
 
 	ResultSet getResultSet(String req);

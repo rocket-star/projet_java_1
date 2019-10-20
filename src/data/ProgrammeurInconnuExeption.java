@@ -1,5 +1,10 @@
 package data;
 
+/**
+ * Class d'exception ProgrammeurInconnuExeption
+ * @author FERNANDO, MARIMOUTTOU, GHALMI
+ * @version 1.1
+ */
 public class ProgrammeurInconnuExeption extends Exception {
 	private String matricule;
 	
@@ -8,6 +13,6 @@ public class ProgrammeurInconnuExeption extends Exception {
 	}
 	
 	public String toString() {
-		return "Le Programmeur n°: "+this.matricule+" n'existe pas.";
+		return "Le Programmeur nï¿½: "+this.matricule+" n'existe pas.";
 	}
 }
