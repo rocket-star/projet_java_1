@@ -23,6 +23,8 @@ import data.ActionsBD;
 import data.ActionsBDImpl;
 import data.ProgrammeurBean;
 import data.ProgrammeurInconnuExeption;
+import myutil.Constantes;
+
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
@@ -40,6 +42,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 	private JTextArea zoneAffichageProgrammeurs;
 	private JScrollPane scroll;
 	private JMenuItem actionQuitter;
+	private JMenuItem actionInitBD;
 	private JMenuItem afficherTous;
 	private JLabel imageEfrei;
 	private JMenu menuAction;
@@ -79,6 +82,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 	private JButton reinitialise;
 	private JButton valider;
 	private JButton annuler;
+	private JButton retour;
 	private ActionsBD dt;
 	private ProgrammeurBean progrBean;
 	private JLabel bande;
@@ -88,9 +92,10 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 	// Fin de declaration des variables
 
 	public void init() {
+		Constantes.init();
 		accueil();
 	}
-	
+
 	public void accueil() {
 
 		try {
@@ -115,11 +120,12 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		menuAfficher = new JMenu("Afficher");
 		afficherTous = new JMenuItem("Tous");
 		actionQuitter = new JMenuItem("Quitter");
+		actionInitBD = new JMenuItem("Initialiser la BD");
 
 		this.setVisible(true);
 		this.setTitle("GesProg");
 		setDefaultCloseOperation(EXIT_ON_CLOSE); // Fermeture fenetre = arret de l'application
-		setBounds(10, 10, 750, 400);
+		setBounds(10, 10, 750, 420);
 		panelFondEcran.setBackground(Color.WHITE); // Couleur de fond
 		imageEfrei.setIcon(new ImageIcon("Logo-Efrei-Paris-2017.jpg")); // Image de fond
 
@@ -132,6 +138,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		menuProgrammeur.add(menuAjouter);
 
 		menuAction.add(actionQuitter);
+		menuAction.add(actionInitBD);
 		panelFondEcran.add(imageEfrei);
 		this.add(panelFondEcran);
 		setJMenuBar(menuPrincipal);
@@ -142,6 +149,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		menuSupprimer.addActionListener(this);
 		menuAjouter.addActionListener(this);
 		actionQuitter.addActionListener(this);
+		actionInitBD.addActionListener(this);
 
 		estAjouter = false;
 		estSupprimer = false;
@@ -150,7 +158,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		SwingUtilities.updateComponentTreeUI(this);
 
 	}
-	
+
 	// Cette méthode initialise et dimensionne les attributs qui concerne le
 	// formulaire
 	public void formulaire() {
@@ -189,7 +197,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		reinitialise = new JButton("Réinitialiser");
 		valider = new JButton("Valider");
 		annuler = new JButton("Annuler");
-		
+
 		Dimension size = matricule.getPreferredSize();
 		matricule.setBounds(10, 10, size.width, size.height);
 
@@ -275,14 +283,14 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		bande.setBackground(Color.DARK_GRAY);
 		bande.setOpaque(true);
 	}
-	
+
 	public void AfficherForm() {
 		panelFormulaire = new JPanel();
 		panelFormulaire.setLayout(null);
 		setBounds(10, 10, 750, 450);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		//ajout des widgets au panel du formulaire
+		// ajout des widgets au panel du formulaire
 		panelFormulaire.add(matricule);
 		panelFormulaire.add(jTMatricule);
 		panelFormulaire.add(nom);
@@ -312,8 +320,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		panelFormulaire.add(reinitialise);
 		panelFormulaire.add(bande);
 
-		
-		//ajout des actionListener liés aux boutons du formulaire
+		// ajout des actionListener liés aux boutons du formulaire
 		recherche.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -353,10 +360,21 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 
 		if (event.getSource() == afficherTous) {
-			remove(panelFondEcran);
+			if (panelFondEcran != null) {
+				remove(panelFondEcran);
+			}
 			if (panelFormulaire != null) {
 				remove(panelFormulaire);
 			}
+			retour = new JButton("Retour");
+			Dimension size = retour.getPreferredSize();
+			retour.setBounds(540, 320, 20 + size.width, size.height);
+			retour.addActionListener(new java.awt.event.ActionListener() {
+				@Override
+				public void actionPerformed(java.awt.event.ActionEvent evt) {
+					jButtonAnnulerActionPerformed(evt);
+				}
+			});
 			estAjouter = false;
 			estSupprimer = false;
 			estModifier = false;
@@ -364,6 +382,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 			zoneAffichageProgrammeurs = new JTextArea(15, 85);
 			scroll = new JScrollPane(zoneAffichageProgrammeurs);
 			panelTous.add(scroll);
+			panelTous.add(retour);
 			this.add(panelTous);
 			zoneAffichageProgrammeurs.setEnabled(false);
 			zoneAffichageProgrammeurs.setDisabledTextColor(Color.BLACK);
@@ -466,6 +485,15 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 				this.dispose();
 			}
 		}
+		if (event.getSource() == actionInitBD) {
+			int dialogResult = JOptionPane.showConfirmDialog(this, "Vérification", "Voulez-vous initialiser la BD ?",
+					JOptionPane.YES_NO_OPTION);
+			if (dialogResult == JOptionPane.YES_OPTION) {
+				dt = new ActionsBDImpl();
+				dt.initBD();
+				dt.fermerRessources();
+			}
+		}
 	}
 
 	public void jButtonRecherhcerActionPerformed(java.awt.event.ActionEvent evt) {
@@ -505,8 +533,13 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 	}
 
 	public void jButtonAnnulerActionPerformed(java.awt.event.ActionEvent evt) {
-		if (evt.getSource() == annuler) {
-			remove(panelFormulaire);
+		if (evt.getSource() == annuler || evt.getSource() == retour) {
+			if (panelFormulaire != null) {
+				remove(panelFormulaire);
+			}
+			if (panelTous != null) {
+				remove(panelTous);
+			}
 			accueil();
 			SwingUtilities.updateComponentTreeUI(this);
 		}
@@ -523,10 +556,10 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 				String pseudo = jTPseudo.getText();
 				String hobby = jTHobby.getText();
 				String adresse = jTAdresse.getText();
-				String dateDeNaissanceS = jSpinnerAnN.getValue().toString() + "-" + jSpinnerMoisN.getValue().toString() + "-"
-						+ jSpinnerJourN.getValue().toString();
-				String dateEmbaucheS = jSpinnerAnE.getValue().toString() + "-" + jSpinnerMoisE.getValue().toString() + "-"
-						+ jSpinnerJourE.getValue().toString();
+				String dateDeNaissanceS = jSpinnerAnN.getValue().toString() + "-" + jSpinnerMoisN.getValue().toString()
+						+ "-" + jSpinnerJourN.getValue().toString();
+				String dateEmbaucheS = jSpinnerAnE.getValue().toString() + "-" + jSpinnerMoisE.getValue().toString()
+						+ "-" + jSpinnerJourE.getValue().toString();
 				java.sql.Date dateDeNaissance = java.sql.Date.valueOf(dateDeNaissanceS);
 				java.sql.Date dateDeEmbauche = java.sql.Date.valueOf(dateEmbaucheS);
 				if (estAjouter) {

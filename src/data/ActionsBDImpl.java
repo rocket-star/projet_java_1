@@ -1,5 +1,10 @@
 package data;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +18,8 @@ import java.util.logging.Logger;
 import myutil.Constantes;
 
 /**
- * Class  ActionsBDImpl
+ * Class ActionsBDImpl
+ * 
  * @author FERNANDO, MARIMOUTTOU, GHALMI
  * @version 1.1
  */
@@ -36,7 +42,6 @@ public class ActionsBDImpl implements ActionsBD {
 		}
 	}
 
-
 	public ResultSet getResultSet(String req) {
 		try {
 			pstmt = dbConn.prepareStatement(req);
@@ -46,7 +51,6 @@ public class ActionsBDImpl implements ActionsBD {
 		}
 		return rs;
 	}
-
 
 	public ArrayList getProgrammeurs() {
 		rs = this.getResultSet(Constantes.REQUETE_TOUS);
@@ -73,11 +77,12 @@ public class ActionsBDImpl implements ActionsBD {
 	}
 
 	/**
-	 * Récupère toutes les infos d'un programmeur et retourne ce
-	 * programmeur sous la forme d'un Java Bean Cette méthode est utilisée pour
-	 * rechercher un progammeur via son matricule
+	 * Récupère toutes les infos d'un programmeur et retourne ce programmeur sous
+	 * la forme d'un Java Bean Cette méthode est utilisée pour rechercher un
+	 * progammeur via son matricule
 	 *
-	 * @param nom : Le nom saisi par l'utilisateur pour lancer la recherche
+	 * @param nom
+	 *            : Le nom saisi par l'utilisateur pour lancer la recherche
 	 * @return prog : Une variable de type ProgrammeurBean
 	 *
 	 */
@@ -129,14 +134,14 @@ public class ActionsBDImpl implements ActionsBD {
 			pstmt.setString(5, pseudo);
 			pstmt.setString(6, responsable);
 			pstmt.setString(7, hobby);
-			pstmt.setDate(8,dateDeNaissance);
+			pstmt.setDate(8, dateDeNaissance);
 			pstmt.setDate(9, dateEmbauche);
 			rs = pstmt.executeQuery();
 		} catch (SQLException sqle) {
 			Logger.getLogger(ActionsBDImpl.class.getName()).log(Level.SEVERE, null, sqle);
 		}
 	}
-	
+
 	public void updateProgrammeur(String matricule, String nom, String prenom, String adresse, String pseudo,
 			String responsable, String hobby, java.sql.Date dateDeNaissance, java.sql.Date dateEmbauche) {
 		try {
@@ -147,7 +152,7 @@ public class ActionsBDImpl implements ActionsBD {
 			pstmt.setString(4, pseudo);
 			pstmt.setString(5, responsable);
 			pstmt.setString(6, hobby);
-			pstmt.setDate(7,dateDeNaissance);
+			pstmt.setDate(7, dateDeNaissance);
 			pstmt.setDate(8, dateEmbauche);
 			pstmt.setString(9, matricule);
 			rs = pstmt.executeQuery();
@@ -180,4 +185,41 @@ public class ActionsBDImpl implements ActionsBD {
 		}
 	}
 
+	@Override
+	public void initBD() {
+		String line;
+		StringBuilder s = new StringBuilder();
+		try {
+			FileReader file = new FileReader(new File(Constantes.SCRIPT));
+			BufferedReader buff = new BufferedReader(file);
+			while ((line = buff.readLine()) != null) {
+				s.append(line);
+			}
+			buff.close();
+			String[] sql = s.toString().split(";");
+		
+			pstmt = dbConn.prepareStatement("select * from tab where tname='PROGRAMMEUR'");
+			ResultSet res = pstmt.executeQuery();
+			if(res.next()) {
+				pstmt = dbConn.prepareStatement(sql[0]);
+				pstmt.executeQuery();
+			}
+			
+			pstmt = dbConn.prepareStatement("select * from user_sequences where SEQUENCE_NAME='SEQ_PROGRAMMEUR'");
+			res = pstmt.executeQuery();
+			if(res.next()) {
+				pstmt = dbConn.prepareStatement(sql[1]);
+				pstmt.executeQuery();
+			}
+			
+			for (int i = 2; i < sql.length; i++) {
+				if (!sql[i].equals("")) {
+					pstmt = dbConn.prepareStatement(sql[i]);
+					pstmt.executeQuery();
+				}
+			}
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

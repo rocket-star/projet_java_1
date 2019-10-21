@@ -13,6 +13,11 @@ import java.util.Date;
 public interface ActionsBD {
 
 	/**
+	 * Initialise la base de données avec le script
+	 */
+	void initBD();
+	
+	/**
 	 * Lance la requete passée en paramÃ¨tre et retourne le ResultSet
 	 * correspondant Ã  cette requÃªte
 	 *
