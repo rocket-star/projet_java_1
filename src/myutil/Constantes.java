@@ -7,7 +7,6 @@ package myutil;
  */
 public class Constantes {
 
-	public static final String OCCUPATION = "Programmeur";
 	public static final String URL = "jdbc:oracle:thin:@localhost:1521:XE";
 	public static final String USER = "SYSTEM";
 	public static final String MDP = "SYSTEM";

@@ -20,7 +20,6 @@ import myutil.Constantes;
 public class ActionsBDImpl implements ActionsBD {
 
 	private Connection dbConn;
-	private Statement stmt;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	private ArrayList<ProgrammeurBean> listeProgrammeurs;
@@ -37,30 +36,18 @@ public class ActionsBDImpl implements ActionsBD {
 		}
 	}
 
-	/**
-	 * Lance la requete passée en paramètre et retourne le ResultSet
-	 * correspondant à cette requête
-	 *
-	 * @param req La requête SQL que l'on souhaite exécuter
-	 *            
-	 * @return rs Une variable de type ResultSet
-	 */
+
 	public ResultSet getResultSet(String req) {
 		try {
-			stmt = dbConn.createStatement();
-			rs = stmt.executeQuery(req);
+			pstmt = dbConn.prepareStatement(req);
+			rs = pstmt.executeQuery();
 		} catch (SQLException sqle) {
 			Logger.getLogger(ActionsBDImpl.class.getName()).log(Level.SEVERE, null, sqle);
 		}
 		return rs;
 	}
 
-	/**
-	 * Cette méthode récupère toutes les infos d'un programmeur et retourne une
-	 * liste de l'ensemble des programmeurs
-	 *
-	 * @return listeProgrammeurs : Une variable de type ArryList
-	 */
+
 	public ArrayList getProgrammeurs() {
 		rs = this.getResultSet(Constantes.REQUETE_TOUS);
 		listeProgrammeurs = new ArrayList<>();
@@ -86,7 +73,7 @@ public class ActionsBDImpl implements ActionsBD {
 	}
 
 	/**
-	 * Cette méthode récupère toutes les infos d'un programmeur et retourne ce
+	 * Récupère toutes les infos d'un programmeur et retourne ce
 	 * programmeur sous la forme d'un Java Bean Cette méthode est utilisée pour
 	 * rechercher un progammeur via son matricule
 	 *
@@ -121,12 +108,6 @@ public class ActionsBDImpl implements ActionsBD {
 		return prog;
 	}
 
-	/**
-	 * Cette méthode supprime un programmeur correspondant au matricule passé en paramètre
-	 * 
-	 * @param matricule : La matricule saisi par l'utilisateur utilisé pour lancer la recherche
-	 *
-	 */
 	public void deleteProgrammeur(String matricule) {
 		try {
 			pstmt = dbConn.prepareStatement(Constantes.REQUETE_DELETE);
@@ -137,20 +118,6 @@ public class ActionsBDImpl implements ActionsBD {
 		}
 	}
 
-	/**
-	 * Cette méthode ajoute un programmeur à la db
-	 * 
-	 * @param matricule : Le matricule du programmeur
-	 * @param nom : Nom du programmeur
-	 * @param prenom : Prenom du programmeur
-	 * @param adresse : Adresse du programmeur
-	 * @param pseudo : Pseudo du programmeur
-	 * @param responsable : Responsable du programmeur
-	 * @param hobby : Hobby du programmeur
-	 * @param dateDeNaissance : Date de naissance du programmeur
-	 * @param dateEmbauche : Date d'embauche du programmeur
-	 *
-	 */
 	public void insertProgrammeur(String matricule, String nom, String prenom, String adresse, String pseudo,
 			String responsable, String hobby, java.sql.Date dateDeNaissance, java.sql.Date dateEmbauche) {
 		try {
@@ -170,20 +137,6 @@ public class ActionsBDImpl implements ActionsBD {
 		}
 	}
 	
-	/**
-	 * Cette méthode permet de mettre à jour les données d'un programmeur
-	 * 
-	 * @param matricule : Le (nouveau) matricule du programmeur
-	 * @param nom : (nouveau) Nom du programmeur
-	 * @param prenom : (nouveau) Prenom du programmeur
-	 * @param adresse : (nouvelle) Adresse du programmeur
-	 * @param pseudo : (nouveau) Pseudo du programmeur
-	 * @param responsable : (nouveau) Responsable du programmeur
-	 * @param hobby : (nouveau) Hobby du programmeur
-	 * @param dateDeNaissance : (nouvelle) Date de naissance du programmeur
-	 * @param dateEmbauche : (nouvelle) Date d'embauche du programmeur
-	 *
-	 */
 	public void updateProgrammeur(String matricule, String nom, String prenom, String adresse, String pseudo,
 			String responsable, String hobby, java.sql.Date dateDeNaissance, java.sql.Date dateEmbauche) {
 		try {
@@ -203,13 +156,6 @@ public class ActionsBDImpl implements ActionsBD {
 		}
 	}
 
-	/**
-	 * Cette méthode permet de construire la chaîne de caractères qui sera
-	 * affichée lorsqu'on choisit Programmeur - Afficher - Tous
-	 *
-	 * @return listeProg : Une variable de type String
-	 *
-	 */
 	public String afficherProgrammeurs() {
 		String listeProg = "";
 
@@ -220,17 +166,10 @@ public class ActionsBDImpl implements ActionsBD {
 		return listeProg;
 	}
 
-	/**
-	 * Cette méthode permet de libérer les ressources liées à la base de
-	 * données
-	 */
 	public void fermerRessources() {
 		if (dbConn != null) {
 			try {
 				dbConn.close();
-				if (stmt != null) {
-					stmt.close();
-				}
 				if (pstmt != null) {
 					pstmt.close();
 				}
