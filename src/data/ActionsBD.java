@@ -13,25 +13,25 @@ import java.util.Date;
 public interface ActionsBD {
 
 	/**
-	 * Lance la requete passÃ©e en paramÃ¨tre et retourne le ResultSet
+	 * Lance la requete passée en paramÃ¨tre et retourne le ResultSet
 	 * correspondant Ã  cette requÃªte
 	 *
-	 * @param req La requÃªte SQL que l'on souhaite exÃ©cuter
+	 * @param req La requÃªte SQL que l'on souhaite exécuter
 	 *            
 	 * @return rs Une variable de type ResultSet
 	 */
 	ResultSet getResultSet(String req);
 	
 	/**
-	 * RÃ©cupÃ¨re tout les programmeurs de la base de données
+	 * RécupÃ¨re tout les programmeurs de la base de données
 	 *
 	 * @return listeProgrammeurs : Une Liste de Programmeurs
 	 */
 	ArrayList getProgrammeurs();
 
 	/**
-	 * RÃ©cupÃ¨re toutes les infos d'un programmeur et retourne ce
-	 * programmeur sous la forme d'un Java Bean Cette mÃ©thode est utilisÃ©e pour
+	 * RécupÃ¨re toutes les infos d'un programmeur et retourne ce
+	 * programmeur sous la forme d'un Java Bean Cette méthode est utilisée pour
 	 * rechercher un progammeur via son matricule
 	 *
 	 * @param nom : Le nom saisi par l'utilisateur pour lancer la recherche
@@ -43,7 +43,7 @@ public interface ActionsBD {
 	/**
 	 * Supprime un programmeur correspondant au matricule passé en paramètre
 	 * 
-	 * @param matricule : La matricule saisi par l'utilisateur utilisÃ© pour lancer la recherche
+	 * @param matricule : La matricule saisi par l'utilisateur utilisé pour lancer la recherche
 	 *
 	 */
 	void deleteProgrammeur(String matricule);

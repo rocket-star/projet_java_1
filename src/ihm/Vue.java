@@ -35,8 +35,8 @@ import javax.swing.SpinnerNumberModel;
  */
 public class Vue extends GestionVueAbstraite implements ActionListener {
 
-	// DÃ©claration des attributs
-	// L'initialisation se fera "en local" dans des mÃ©thodes
+	// Déclaration des attributs
+	// L'initialisation se fera "en local" dans des méthodes
 	private JTextArea zoneAffichageProgrammeurs;
 	private JScrollPane scroll;
 	private JMenuItem actionQuitter;
@@ -99,9 +99,8 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-		panelFondEcran = new JPanel(); // CrÃ©ation d'un panel pour gÃ©rer les widgets
+		panelFondEcran = new JPanel(); // Création d'un panel pour gérer les widgets
 		panelFondEcran.setLayout(null);
-		// Insets insets = PanelFondEcran.getInsets();
 
 		imageEfrei = new JLabel(new ImageIcon("Logo-Efrei-Paris-2017.jpg"));
 		Dimension size = imageEfrei.getPreferredSize();
@@ -152,7 +151,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 
 	}
 	
-	// Cette mÃ©thode initialise et dimensionne les attributs qui concerne le
+	// Cette méthode initialise et dimensionne les attributs qui concerne le
 	// formulaire
 	public void formulaire() {
 		bande = new JLabel();
@@ -283,8 +282,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		setBounds(10, 10, 750, 450);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		// Insets insets = panelModifier.getInsets();
-
+		//ajout des widgets au panel du formulaire
 		panelFormulaire.add(matricule);
 		panelFormulaire.add(jTMatricule);
 		panelFormulaire.add(nom);
@@ -314,6 +312,8 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		panelFormulaire.add(reinitialise);
 		panelFormulaire.add(bande);
 
+		
+		//ajout des actionListener liés aux boutons du formulaire
 		recherche.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -473,7 +473,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 			dt = new ActionsBDImpl();
 			try {
 				progrBean = dt.getProgrammeur(this.jTMatricule.getText());// Une fois le programmeur trouver
-				this.jTNom.setText(progrBean.getNom());// On prÃ©rempli chaque champs du formulaire avec ses
+				this.jTNom.setText(progrBean.getNom());// On prérempli chaque champs du formulaire avec ses
 														// informations
 				this.jTPrenom.setText(progrBean.getPrenom());
 				this.jTAdresse.setText(progrBean.getAdresse());
@@ -509,13 +509,13 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 			remove(panelFormulaire);
 			accueil();
 			SwingUtilities.updateComponentTreeUI(this);
-		} // TODO add your handling code here:
+		}
 	}
 
 	public void jButtonValiderActionPerformed(java.awt.event.ActionEvent evt) throws ParseException {
 		if (evt.getSource() == valider) {
 			dt = new ActionsBDImpl();
-			if (estAjouter || estModifier) {// ci-dessous on recupere les donnÃ©es contenus dans les champs
+			if (estAjouter || estModifier) {// ci-dessous on recupere les données contenus dans les champs
 				String matricule = jTMatricule.getText();
 				String nom = jTNom.getText();
 				String prenom = jTPrenom.getText();
