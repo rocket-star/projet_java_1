@@ -3,6 +3,8 @@ package ihm;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,6 +18,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -39,7 +42,8 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 
 	// Déclaration des attributs
 	// L'initialisation se fera "en local" dans des méthodes
-	private JTextArea zoneAffichageProgrammeurs;
+	private JTable zoneAffichageProgrammeurs;
+	private JLabel nbProgrammeurs;
 	private JScrollPane scroll;
 	private JMenuItem actionQuitter;
 	private JMenuItem actionInitBD;
@@ -358,7 +362,6 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-
 		if (event.getSource() == afficherTous) {
 			if (panelFondEcran != null) {
 				remove(panelFondEcran);
@@ -368,28 +371,66 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 			}
 			retour = new JButton("Retour");
 			Dimension size = retour.getPreferredSize();
-			retour.setBounds(540, 320, 20 + size.width, size.height);
+			retour.setBounds(450, 250, 20 + size.width, size.height);
 			retour.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent evt) {
 					jButtonAnnulerActionPerformed(evt);
 				}
 			});
+
 			estAjouter = false;
 			estSupprimer = false;
 			estModifier = false;
+
+			JLabel titre = new JLabel();
+			titre.setText("LISTE-DES-PROGRAMMEURS");
+			size = titre.getPreferredSize();
+			titre.setBounds(10, 2, size.width +10, size.height +3);
+
 			panelTous = new JPanel();
-			zoneAffichageProgrammeurs = new JTextArea(15, 85);
+			panelTous.setLayout(null);
+			String[] entetes = { "ID", "MATRICULE", "NOM", "PRENOM", "ADRESSE", "PSEUDO", "RESPONSABLE", "HOBBY",
+					"DATE DE NAISSANCE", "DATE D'EMBAUCHE" };
+
+			dt = new ActionsBDImpl();
+			ArrayList<ProgrammeurBean> programmeurs = dt.getProgrammeurs();
+			dt.fermerRessources();
+			Object[][] donnees = new Object[programmeurs.size()][Constantes.NB_COLLONES];
+
+			int i = 0;
+			for (ProgrammeurBean prog : programmeurs) {
+				donnees[i][0] = prog.getId();
+				donnees[i][1] = prog.getMatricule();
+				donnees[i][2] = prog.getNom();
+				donnees[i][3] = prog.getPrenom();
+				donnees[i][4] = prog.getAdresse();
+				donnees[i][5] = prog.getPseudo();
+				donnees[i][6] = prog.getResponsable();
+				donnees[i][7] = prog.getHobby();
+				donnees[i][8] = new SimpleDateFormat("yyyy-MM-dd").format(prog.getDateNaiss());
+				donnees[i][9] = new SimpleDateFormat("yyyy-MM-dd").format(prog.getDateEmbauche());
+				i++;
+			}
+
+			zoneAffichageProgrammeurs = new JTable(donnees, entetes);
 			scroll = new JScrollPane(zoneAffichageProgrammeurs);
+			size = scroll.getPreferredSize();
+			scroll.setBounds(10, 25, size.width + 260, size.height - 200);
+			nbProgrammeurs = new JLabel();
+			String nbProgs = "Il y a " + i + " programmeur";
+			if (i > 1) {
+				nbProgs += "s";
+			}
+			nbProgrammeurs.setText(nbProgs);
+			size = nbProgrammeurs.getPreferredSize();
+			nbProgrammeurs.setBounds(20, 250, size.width, size.height);
+			panelTous.add(nbProgrammeurs);
 			panelTous.add(scroll);
 			panelTous.add(retour);
+			panelTous.add(titre);
 			this.add(panelTous);
 			zoneAffichageProgrammeurs.setEnabled(false);
-			zoneAffichageProgrammeurs.setDisabledTextColor(Color.BLACK);
-			dt = new ActionsBDImpl();
-			String contenuTextArea = dt.afficherProgrammeurs();
-			zoneAffichageProgrammeurs.setText(contenuTextArea);
-			dt.fermerRessources();
 			SwingUtilities.updateComponentTreeUI(this);
 		}
 

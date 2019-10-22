@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+
 import myutil.Constantes;
 
 /**
@@ -52,13 +55,14 @@ public class ActionsBDImpl implements ActionsBD {
 		return rs;
 	}
 
-	public ArrayList getProgrammeurs() {
+	public ArrayList<ProgrammeurBean> getProgrammeurs() {
 		rs = this.getResultSet(Constantes.REQUETE_TOUS);
 		listeProgrammeurs = new ArrayList<>();
 
 		try {
 			while (rs.next()) {
 				prog = new ProgrammeurBean();
+				prog.setId(rs.getInt("ID"));
 				prog.setMatricule(rs.getString("MATRICULE"));
 				prog.setPrenom(rs.getString("PRENOM"));
 				prog.setNom(rs.getString("NOM"));
@@ -197,21 +201,21 @@ public class ActionsBDImpl implements ActionsBD {
 			}
 			buff.close();
 			String[] sql = s.toString().split(";");
-		
-			pstmt = dbConn.prepareStatement("select * from tab where tname='PROGRAMMEUR'");
+
+			pstmt = dbConn.prepareStatement(Constantes.TABLE_EXISTS);
 			ResultSet res = pstmt.executeQuery();
-			if(res.next()) {
+			if (res.next()) {
 				pstmt = dbConn.prepareStatement(sql[0]);
 				pstmt.executeQuery();
 			}
-			
-			pstmt = dbConn.prepareStatement("select * from user_sequences where SEQUENCE_NAME='SEQ_PROGRAMMEUR'");
+
+			pstmt = dbConn.prepareStatement(Constantes.SEQUENCE_EXISTS);
 			res = pstmt.executeQuery();
-			if(res.next()) {
+			if (res.next()) {
 				pstmt = dbConn.prepareStatement(sql[1]);
 				pstmt.executeQuery();
 			}
-			
+
 			for (int i = 2; i < sql.length; i++) {
 				if (!sql[i].equals("")) {
 					pstmt = dbConn.prepareStatement(sql[i]);

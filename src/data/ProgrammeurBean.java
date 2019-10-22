@@ -6,6 +6,7 @@ import java.util.Date;
 
 /**
  * Class ProgrammeurBean
+ * 
  * @author FERNANDO, MARIMOUTTOU, GHALMI
  * @version 1.1
  */
@@ -19,14 +20,15 @@ public class ProgrammeurBean {
 	private String hobby;
 	private Date dateNaiss;
 	private Date dateEmbauche;
+	private int id;
 
 	public ProgrammeurBean() {
 	}
 
 	@Override
 	public String toString() {
-		String affichage = this.matricule + " " + this.nom + " " + this.prenom + " " + this.adresse + " " + this.pseudo
-				+ " " + this.responsable + " " + this.hobby + " "
+		String affichage = this.id + " " + this.matricule + " " + this.nom + " " + this.prenom + " " + this.adresse
+				+ " " + this.pseudo + " " + this.responsable + " " + this.hobby + " "
 				+ new SimpleDateFormat("yyyy-MM-dd").format(this.dateNaiss) + " "
 				+ new SimpleDateFormat("yyyy-MM-dd").format(this.dateEmbauche) + "\n";
 
@@ -103,6 +105,14 @@ public class ProgrammeurBean {
 
 	public void setDateEmbauche(Date dateEmbauche) {
 		this.dateEmbauche = dateEmbauche;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

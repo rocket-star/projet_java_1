@@ -24,7 +24,9 @@ public class Constantes {
 	public static final String REQUETE_DELETE = "DELETE PROGRAMMEUR WHERE matricule = ?";
 	public static final String REQUETE_INSERT = "INSERT INTO PROGRAMMEUR(ID,MATRICULE,NOM,PRENOM,ADRESSE,PSEUDO,RESPONSABLE,HOBBY,DATE_NAISS,DATE_EMB) VALUES(seq_programmeur.nextval,?,?,?,?,?,?,?,?,?)";
 	public static final String REQUETE_UPDATE = "UPDATE PROGRAMMEUR SET NOM = ?, PRENOM = ?, ADRESSE = ?, PSEUDO = ?, RESPONSABLE = ?, HOBBY = ?, DATE_NAISS = ?, DATE_EMB = ? WHERE MATRICULE = ? ";
-
+	public static final String TABLE_EXISTS = "select * from tab where tname='PROGRAMMEUR'";
+	public static final String SEQUENCE_EXISTS = "select * from user_sequences where SEQUENCE_NAME='SEQ_PROGRAMMEUR'";
+	public static final int NB_COLLONES = 10;
 	
 	public static void init() {
 		try {

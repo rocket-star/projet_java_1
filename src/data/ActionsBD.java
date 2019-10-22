@@ -32,7 +32,7 @@ public interface ActionsBD {
 	 *
 	 * @return listeProgrammeurs : Une Liste de Programmeurs
 	 */
-	ArrayList getProgrammeurs();
+	ArrayList<ProgrammeurBean> getProgrammeurs();
 
 	/**
 	 * RÈcup√®re toutes les infos d'un programmeur et retourne ce
