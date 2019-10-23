@@ -115,6 +115,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 		Dimension size = imageEfrei.getPreferredSize();
 		size = imageEfrei.getPreferredSize();
 		imageEfrei.setBounds(100, 70, size.width, size.height);
+		
 		menuPrincipal = new JMenuBar();
 		menuProgrammeur = new JMenu("Programmeur");
 		menuSupprimer = new JMenuItem("Supprimer");
@@ -128,6 +129,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 
 		this.setVisible(true);
 		this.setTitle("GesProg");
+		this.setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE); // Fermeture fenetre = arret de l'application
 		setBounds(10, 10, 750, 420);
 		panelFondEcran.setBackground(Color.WHITE); // Couleur de fond
@@ -135,16 +137,19 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 
 		menuPrincipal.add(menuProgrammeur);
 		menuPrincipal.add(menuAction);
+		
 		menuProgrammeur.add(menuAfficher);
 		menuAfficher.add(afficherTous);
 		menuProgrammeur.add(menuModifier);
 		menuProgrammeur.add(menuSupprimer);
 		menuProgrammeur.add(menuAjouter);
-
+		
 		menuAction.add(actionQuitter);
 		menuAction.add(actionInitBD);
+		
 		panelFondEcran.add(imageEfrei);
 		this.add(panelFondEcran);
+		
 		setJMenuBar(menuPrincipal);
 
 		// ici on effectue l'enregistrement des widget
@@ -451,7 +456,6 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 			valider.setEnabled(false);
 			this.add(panelFormulaire);
 			SwingUtilities.updateComponentTreeUI(this);
-
 		}
 
 		if (event.getSource() == menuAjouter) {
