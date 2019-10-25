@@ -197,29 +197,29 @@ public class ActionsBDImpl implements ActionsBD {
 			FileReader file = new FileReader(new File(Constantes.SCRIPT));
 			BufferedReader buff = new BufferedReader(file);
 			while ((line = buff.readLine()) != null) {
-				s.append(line);
+				s.append(line);//lecture du fichier script.txt
 			}
 			buff.close();
-			String[] sql = s.toString().split(";");
+			String[] sql = s.toString().split(";");//creation d'un tableau constitué de chaque requette
 
-			pstmt = dbConn.prepareStatement(Constantes.TABLE_EXISTS);
+			pstmt = dbConn.prepareStatement(Constantes.TABLE_EXISTS);//On verifie si la table existe déja
 			ResultSet res = pstmt.executeQuery();
 			if (res.next()) {
-				pstmt = dbConn.prepareStatement(sql[0]);
+				pstmt = dbConn.prepareStatement(sql[0]);//si la table existe on la supprime
 				pstmt.executeQuery();
 			}
 
-			pstmt = dbConn.prepareStatement(Constantes.SEQUENCE_EXISTS);
+			pstmt = dbConn.prepareStatement(Constantes.SEQUENCE_EXISTS);//On verifie si la sequence existe déja 
 			res = pstmt.executeQuery();
 			if (res.next()) {
-				pstmt = dbConn.prepareStatement(sql[1]);
+				pstmt = dbConn.prepareStatement(sql[1]);//si la sequence existe on la supprime
 				pstmt.executeQuery();
 			}
 
 			for (int i = 2; i < sql.length; i++) {
 				if (!sql[i].equals("")) {
 					pstmt = dbConn.prepareStatement(sql[i]);
-					pstmt.executeQuery();
+					pstmt.executeQuery();//on execute chaque requette une a une
 				}
 			}
 		} catch (IOException | SQLException e) {

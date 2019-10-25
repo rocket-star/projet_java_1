@@ -13,6 +13,6 @@ public class ProgrammeurInconnuExeption extends Exception {
 	}
 	
 	public String toString() {
-		return "Le Programmeur n°: "+this.matricule+" n'existe pas.";
+		return "Le Programmeur n°: "+this.matricule+" n'existe pas."; //message d'erreur contenant le matricule saisi
 	}
 }

@@ -607,13 +607,13 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 						+ "-" + jSpinnerJourE.getValue().toString();
 				java.sql.Date dateDeNaissance = java.sql.Date.valueOf(dateDeNaissanceS);
 				java.sql.Date dateDeEmbauche = java.sql.Date.valueOf(dateEmbaucheS);
-				if (estAjouter) {
+				if (estAjouter) {//comportement du boutton valider sur la page Ajouter
 					dt.insertProgrammeur(matricule, nom, prenom, adresse, pseudo, responsable, hobby, dateDeNaissance,
 							dateDeEmbauche);
 					JOptionPane.showMessageDialog(this, "Le Programmeur est ajouté", "Succès!",
 							JOptionPane.INFORMATION_MESSAGE);
 					valider.setEnabled(false);
-				} else if (estModifier) {
+				} else if (estModifier) {//comportement du boutton valider sur la page Modifier
 					dt.updateProgrammeur(matricule, nom, prenom, adresse, pseudo, responsable, hobby, dateDeNaissance,
 							dateDeEmbauche);
 					JOptionPane.showMessageDialog(this, "Le Programmeur est modifié", "Succès!",
@@ -622,7 +622,7 @@ public class Vue extends GestionVueAbstraite implements ActionListener {
 					reinitialise.setEnabled(false);
 				}
 				viderChamps();
-			} else if (estSupprimer) {
+			} else if (estSupprimer) {//comportement du boutton valider sur la page Supprimer
 				String matricule = jTMatricule.getText();
 				dt.deleteProgrammeur(matricule);
 				JOptionPane.showMessageDialog(this, "Le Programmeur est supprimé", "Succès!",
